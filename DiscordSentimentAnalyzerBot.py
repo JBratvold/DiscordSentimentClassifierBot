@@ -18,7 +18,7 @@ The Python script implements a Discord bot using primarily the "discord.ext" lib
 
 
 ## Installation
-1. Clone the repository: "git clone https://github.com/PrivateAccount.git"
+1. Clone the repository: "git clone https://github.com/JBratvold/DiscordSentimentClassifierBot.git"
 2. Install required libraries.
 3. Set up a Discord bot and obtain the token. This is done through discord developers portal.
 4. Replace the placeholder DISCORD_TOKEN ("sample_token_1234567") in the script with your bot's token.
