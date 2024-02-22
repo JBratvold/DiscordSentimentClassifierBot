@@ -26,7 +26,7 @@ The Python script implements a Discord bot using primarily the "discord.ext" lib
 5. Adjust other constants and file paths as needed.
 
 ## Usage
-1. Run the script: "python3 DiscordSentimentAnalyzerBot.py"
+1. Run the script: "python3 DiscordSentimentClassifierBot.py"
 2. Invite the bot to your Discord server.
 3. Use the "!train" command to add training data for the bot. The bot will prompt you to classify the sentiment of the provided comment using reactions.
 4. Use the "!classify" command to classify a comment without adding it to the training data.
