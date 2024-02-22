@@ -1,12 +1,8 @@
 """
-README
-
-# DiscordSentimentAnalyzerBot
 
 ## Overview
 Primary purpose is to determine if a given text has either a positive or negative sentiment.
 The Python script implements a Discord bot using primarily the "discord.ext" library. The bot can be trained with user-provided data to improve its classification accuracy.
-
 
 ## Requirements
 - stable internet connection (to connect the bot to your discord server)
@@ -15,7 +11,6 @@ The Python script implements a Discord bot using primarily the "discord.ext" lib
 - discord.py library
 - nltk library
 - other (asyncio, re, string)
-
 
 ## Installation
 1. Clone the repository: "git clone https://github.com/JBratvold/DiscordSentimentClassifierBot.git"
@@ -54,7 +49,6 @@ The python script is written and organized in the following sections:
 - Discord Bot Start-Up
 The function calls are initiated on bot start-up, and then are triggered as the user inputs a command to the bot through discord.
 
-
 ## Author
 Joshua Bratvold
 
@@ -73,20 +67,13 @@ from discord.ext import commands
 ##################################################
 #                  CONSTANTS                     #
 ##################################################
-
-
-
 # Token/ID's for discord 
 # TODO - Update token with your discord bots valid token
 DISCORD_TOKEN = "sample_token_1234567"
 
-
-
 # Channel ID that the bot will interact in 
 # TODO - Update Channel Id with your discord servers channel id
 DISCORD_CHANNEL_ID = 1 
-
-
 
 # Create an instance of the bot
 INTENTS = discord.Intents.all()
@@ -144,6 +131,7 @@ def convertFileToList(filePath: str) -> list:
     >>> convertFileToList("example.txt") 
     ['Line 1', 'Line 2', 'Line 3']
     """
+
     f = open(filePath, "r")
     list = [line.strip() for line in f]
     f.close()
@@ -163,6 +151,7 @@ def parseMessage(dirtyString: str) -> list:
     >>> parseMessage("This is A weird! meSsagE with punctuations @nd hyperlinks??")
     ['weird', 'messag', 'punctuat', 'hyperlink']
     """
+
     # Remove punctuations
     dirtyString = removePunctuationFromString(dirtyString)
 
@@ -198,6 +187,7 @@ def filterStopwords(wordsToFilter: list, stopwords: list) -> list:
     >>> filterStopwords(['this', 'is', 'a', 'sample', 'sentence'], ['is', 'a'])
     ['this', 'sample', 'sentence']
     """
+
     return [word for word in wordsToFilter if word not in stopwords]
 
 def stemList(listToStem: list) -> list:
@@ -214,6 +204,7 @@ def stemList(listToStem: list) -> list:
     >>> stemList(['running', 'easily', 'unhappiness'])
     ['run', 'easili', 'unhappi']
     """
+
     return [PorterStemmer().stem(word) for word in listToStem]
 
 def removePunctuationFromString(stringToRemovePunctuation: str) -> str:
@@ -231,6 +222,7 @@ def removePunctuationFromString(stringToRemovePunctuation: str) -> str:
     >>> removePunctuationFromString("Hello, this is a sample text!!")
     'Hello this is a sample text'
     """
+
     # Make a translator object to replace punctuation with none
     translator = str.maketrans('', '', string.punctuation)
 
@@ -251,6 +243,7 @@ def combineListIntoSingleString(commentList: list) -> str:
     >>> combineListIntoSingleString(['Great work!', 'Keep it up.'])
     'Great work! Keep it up.'
     """
+
     comments = ' '.join(commentList)
     return comments
 
@@ -268,6 +261,7 @@ def calculateFrequencies(trainingDataWordList: list) -> dict:
     >>> calculateFrequencies(['apple', 'banana', 'apple', 'orange', 'banana'])
     {'apple': 2, 'banana': 2, 'orange': 1}
     """
+
     # Creating an empty dictionary to store word frequencies
     wordFrequenciesDictionary = {}
     
@@ -293,6 +287,7 @@ def calculateWordProbability(wordFrequencyDictionary: dict, totalWords: int) -> 
     >>> calculateProbabilityOfWord({'apple': 2, 'banana': 1, 'orange': 3}, 6)
     {'apple': 1/3, 'banana': 1/6, 'orange': 1/2}
     """
+
     # Creating an empty dictionary to store word probabilities
     probabilitiesDictionary = {}
 
@@ -316,6 +311,7 @@ def processData(filePath: str) -> list:
     >>> processData("data.txt")
     ['processed', 'data', 'output']
     """
+
     # Convert file to a list of strings
     listToConvertToString = convertFileToList(filePath)
     
@@ -341,6 +337,7 @@ def getWordCount(wordList: list) -> int:
     >>> getWordCount(['apple', 'banana', 'orange'])
     3
     """
+
     return len(wordList)
 
 def calculateSentimentProbabilities(trainingDataWordList: list) -> dict:
@@ -384,6 +381,7 @@ def classifyComment(comment: str, posProbabilities: dict, negProbabilities: dict
     >>> classifyComment("Great product!", posProbabilities, negProbabilities, posWordList, negWordList)
     'Positive'
     """
+
     # Clean the comment to classify
     cleanedCommentList = parseMessage(comment)
 
@@ -442,6 +440,7 @@ def calculateLikelihood(commentWordList: list, probabilitiesDict: dict, training
     >>> calculateLikelihood(['good', 'great', 'awesome'], {'good': 0.5, 'great': 0.3, 'awesome': 0.2}, ['good', 'bad', 'awesome'], 0.4)
     0.02
     """
+
     # Initialize likelihood with the base probability
     likelihood = baseProbability
 
@@ -486,6 +485,7 @@ def addToTrainingData(comment: str, filePath: str) -> None:
     Returns:
     None
     """
+
     # Initialize the variable with a newline character (so that it makes every new entry on a new line)
     commentIntoSingleLine = "\n"
 
@@ -520,6 +520,7 @@ def UpdateClassifierData() -> None:
     Returns:
     None
     """
+
     global base_pos_probability
     global base_neg_probability
     global stopwords
@@ -558,6 +559,7 @@ async def sendTrainingEmbed(comment: str) -> discord.Embed:
     >>> await sendTrainingEmbed("This is a positive comment.")
     <discord.Embed object at 0x...>
     """
+
     # Creating an embed to prompt the user to select how they would classify their data
     promptEmbed = discord.Embed(title=f"Training",
                                 description=f"` {comment} `\n\n{PROMPT_SELECT_SENTIMENT}",
@@ -599,6 +601,7 @@ async def waitForReaction(ctx: discord.ext.commands.Context, embed: discord.Embe
         Returns:
         bool: True if the reaction meets the specified criteria, False otherwise.
         """
+
         return (
             reaction.count > 1
             and user == ctx.author
@@ -626,6 +629,7 @@ async def handlePositiveReaction(ctx: discord.ext.commands.Context, comment: str
     Returns:
     None
     """
+
     # Add the comment to the positive training data
     addToTrainingData(comment, POS_TRAINING_DATA)
 
@@ -650,6 +654,7 @@ async def handleNegativeReaction(ctx: discord.ext.commands.Context, comment: str
     Returns:
     None
     """
+
     # Add the comment to the negative training data
     addToTrainingData(comment, NEG_TRAINING_DATA)
 
@@ -675,6 +680,7 @@ async def sendClassificationEmbed(ctx: discord.ext.commands.Context, usersClassi
     Returns:
     None
     """
+
     # Create an Embed displaying their success of adding training data 
     addingDataEmbed = discord.Embed(title=f"{MSG_TITLE_DATA_ADDED}",
                                       description=f"{ctx.author.mention} added to the **{usersClassification}** training data.",
@@ -702,6 +708,7 @@ async def on_ready() -> None:
     Returns:
     None
     """
+
     # Console message on bot start-up (For debugging purposes)
     print(f"Connection: Success")
     print(f"BotID: {DISCORD_BOT.user.name}")
@@ -721,6 +728,7 @@ async def on_message(msg: discord.Message) -> None:
     Returns:
     None
     """
+
     # Check if the message sender is not the bot itself to prevent an infinite loop
     if msg.author == DISCORD_BOT.user:
         return
@@ -749,6 +757,7 @@ async def train(ctx: discord.ext.commands.Context, *, comment=None) -> None:
     Returns:
     None
     """
+
     if comment is not None:
         # Send the training embed and wait for a reaction
         trainEmbed = await sendTrainingEmbed(comment)
@@ -776,6 +785,7 @@ async def classify(ctx: discord.ext.commands.Context, *, comment=None) -> None:
     Returns:
     None
     """
+    
     if comment is not None:
         # Re-run the learning algorithm to ensure it's reading the most recent data
         UpdateClassifierData()
